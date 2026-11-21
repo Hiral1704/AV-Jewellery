@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>A.V. Jewellery Admin Login</title>
+    <style>
+        body {
+            margin: 0;
+            background: #f7f3ec;
+            color: #29251f;
+            font-family: Arial;
+            display: grid;
+            place-items: center;
+            min-height: 100vh
+        }
+
+        .card {
+            background: #fff;
+            padding: 40px;
+            width: min(90%, 400px);
+            box-shadow: 0 15px 50px #0001
+        }
+
+        .brand {
+            text-align: center;
+            font: 30px Georgia;
+            letter-spacing: 4px;
+            color: #947443
+        }
+
+        .sub {
+            text-align: center;
+            color: #967d56;
+            letter-spacing: 3px;
+            font-size: 10px;
+            margin: 10px 0 30px
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            background: #fbfaf8
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #29251f;
+            color: white;
+            border: 0;
+            cursor: pointer
+        }
+
+        .error {
+            color: #a53d3d;
+            text-align: center;
+            font-size: 13px
+        }
+    </style>
+</head>
+
+<body>
+    <form class="card" method="post" action="/admin/login">
+        <div class="brand">A.V. JEWELLERY</div>
+        <div class="sub">ADMIN ACCESS</div>
+        <% if(error){%>
+            <p class="error">
+                <%=error%>
+            </p>
+            <%}%><input name="email" type="email" placeholder="Admin email" required><input name="password"
+                    type="password" placeholder="Password" required><button>Secure Login</button>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,361 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>A.V. Jewellery Admin</title>
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #f6f2eb;
+            color: #28241f;
+            font: 14px Arial
+        }
+
+        .top {
+            background: #29251f;
+            color: #fff;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .brand {
+            font: 25px Georgia;
+            letter-spacing: 3px
+        }
+
+        .sub {
+            color: #c2a474;
+            font-size: 10px;
+            letter-spacing: 3px
+        }
+
+        .wrap {
+            padding: 30px 5%
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px
+        }
+
+        .tabs a {
+            background: white;
+            padding: 12px 18px;
+            color: #554b3e;
+            text-decoration: none;
+            border: 1px solid #e5ddd2
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px
+        }
+
+        .stat,
+        section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 22px
+        }
+
+        .stat strong {
+            font-size: 25px;
+            display: block;
+            margin-top: 10px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 7px 0;
+            border: 1px solid #ddd;
+            background: #fff
+        }
+
+        button {
+            border: 0;
+            background: #29251f;
+            color: #fff;
+            padding: 10px 14px;
+            cursor: pointer
+        }
+
+        button.danger {
+            background: #9a4343
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 700px
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+            vertical-align: top
+        }
+
+        th {
+            color: #8a7049;
+            font-size: 11px;
+            text-transform: uppercase
+        }
+
+        td img {
+            width: 55px;
+            height: 65px;
+            object-fit: cover
+        }
+
+        .tablewrap {
+            overflow: auto
+        }
+
+        h2 {
+            font: 26px Georgia
+        }
+
+        h3 {
+            font: 20px Georgia
+        }
+
+        .inline {
+            display: flex;
+            gap: 7px;
+            align-items: center
+        }
+
+        .inline select {
+            min-width: 130px
+        }
+
+        .muted {
+            color: #847b70;
+            font-size: 12px
+        }
+
+        @media(max-width:700px) {
+
+            .stats,
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .wrap {
+                padding: 20px 4%
+            }
+
+            .top {
+                gap: 12px
+            }
+
+            .stat {
+                padding: 15px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div>
+            <div class="brand">A.V. JEWELLERY</div>
+            <div class="sub">ADMIN DASHBOARD</div>
+        </div>
+        <div>Welcome, <%=admin.name%>
+                <form method="post" action="/admin/logout" style="display:inline"><button>Logout</button></form>
+        </div>
+    </header>
+    <main class="wrap">
+        <nav class="tabs"><a href="#overview">Overview</a><a href="#products">Products</a><a href="#orders">Orders</a><a
+                href="#customers">Customers</a></nav>
+        <section id="overview">
+            <h2>Overview</h2>
+            <div class="stats">
+                <div class="stat">Products<strong>
+                        <%=products.length%>
+                    </strong></div>
+                <div class="stat">Orders<strong>
+                        <%=orders.length%>
+                    </strong></div>
+                <div class="stat">Customers<strong>
+                        <%=customers.length%>
+                    </strong></div>
+            </div>
+        </section>
+        <section id="products">
+            <h2>Products</h2>
+            <div class="grid">
+                <form method="post" action="/admin/products" enctype="multipart/form-data">
+                    <h3>Add Product</h3><input name="name" placeholder="Product name" required><input name="category"
+                        placeholder="Category (Earrings, Rings...)" required><input name="price" type="number" min="0"
+                        placeholder="Price" required><input name="originalPrice" type="number" min="0"
+                        placeholder="Original price (optional)"><textarea name="description"
+                        placeholder="Description"></textarea><input name="stock" type="number" min="0"
+                        placeholder="Stock quantity" value="0"><input name="style"
+                        placeholder="Style (Traditional / Modern / Minimal)"><input name="occasion"
+                        placeholder="Occasion (Wedding / Daily Wear...)" /><label><input type="checkbox" name="featured"
+                            style="width:auto"> Featured</label><label><input type="checkbox" name="active" checked
+                            style="width:auto"> Active</label><input type="file" name="image"
+                        accept="image/*"><button>Add product</button>
+                </form>
+                <div>
+                    <h3>Manage products</h3>
+                    <div class="tablewrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(p=>{%><tr>
+                                        <td><img src="<%=p.image||''%>" alt=""></td>
+                                        <td><b>
+                                                <%=p.name%>
+                                            </b><br><small>
+                                                <%=p.category%>
+                                            </small></td>
+                                        <td>₹<%=p.price%>
+                                        </td>
+                                        <td>
+                                            <%=p.stock%>
+                                        </td>
+                                        <td>
+                                            <details>
+                                                <summary>Edit</summary>
+                                                <form method="post" action="/admin/products/<%=p._id%>/update"
+                                                    enctype="multipart/form-data"><input name="name" value="<%=p.name%>"
+                                                        required><input name="category" value="<%=p.category%>"
+                                                        required><input name="price" type="number" value="<%=p.price%>"
+                                                        required><input name="originalPrice" type="number"
+                                                        value="<%=p.originalPrice||''%>"><textarea
+                                                        name="description"><%=p.description||''%></textarea><input
+                                                        name="stock" type="number" value="<%=p.stock%>"><input
+                                                        name="style" value="<%=p.style||''%>" placeholder="Style"><input
+                                                        name="occasion" value="<%=p.occasion||''%>"
+                                                        placeholder="Occasion"><label><input type="checkbox"
+                                                            name="featured" <%=p.featured?'checked':''%>
+                                                        style="width:auto"> Featured</label><label><input
+                                                            type="checkbox" name="active" <%=p.active?'checked':''%>
+                                                        style="width:auto"> Active</label><input type="file"
+                                                        name="image" accept="image/*"><button>Save</button></form>
+                                            </details>
+                                            <form method="post" action="/admin/products/<%=p._id%>/delete"
+                                                onsubmit="return confirm('Delete this product?')"><button
+                                                    class="danger">Delete</button></form>
+                                        </td>
+                                    </tr>
+                                    <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="orders">
+            <h2>Orders</h2>
+            <div class="tablewrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% orders.forEach(o=>{%><tr>
+                                <td><small>
+                                        <%=o._id%>
+                                    </small><br>
+                                    <%=new Date(o.createdAt).toLocaleDateString()%>
+                                </td>
+                                <td>
+                                    <%=o.customer.name%><br>
+                                        <%=o.customer.phone%><br><small>
+                                                <%=o.customer.address%>
+                                            </small>
+                                </td>
+                                <td>
+                                    <%=o.items.map(i=>i.name+' × '+i.qty).join(', ')%>
+                                </td>
+                                <td>₹<%=o.total%>
+                                </td>
+                                <td>
+                                    <form class="inline" method="post" action="/admin/orders/<%=o._id%>/status"><select
+                                            name="status">
+                                            <%['Pending','Confirmed','Processing','Shipped','Delivered','Cancelled'].forEach(s=>
+                                                {%><option <%=o.status===s?'selected':''%>><%=s%>
+                                                </option>
+                                                <%})%>
+                                        </select><button>Save</button></form>
+                                </td>
+                            </tr>
+                            <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section id="customers">
+            <h2>Customers</h2>
+            <div class="tablewrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% customers.forEach(c=>{%><tr>
+                                <td>
+                                    <%=c.name%>
+                                </td>
+                                <td>
+                                    <%=c.email%>
+                                </td>
+                                <td><%=c.phone||'-'%></td>
+                                <td>
+                                    <%=new Date(c.createdAt).toLocaleDateString()%>
+                                </td>
+                            </tr>
+                            <%})%>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
